@@ -1,0 +1,322 @@
+flow untuk webhook
+-pengguna bot punya 2 webhook (value-messages & value-statuses)
+-pegawai punya 2 webhook (value-messages & value-statuses)
+-untuk value-statuses langsung respon dgn res.sendStatus(200)
+-messages pertama dari pengguna bot (ditandai dengan tidak adanya sesi dari pengguna di variabel session) dibalas dengan homemessage
+-semua messages dengan type selain "text" dibalas dengan unsupportedTypeMessage
+-messages pertama dari pegawai jika merupakan interactive.button_reply maka akan mengubah variabel nomorpegawai pada sesi suatu pengguna bot dengan nomor pegawai tsb
+selain itu anggap pegawai adalah pengguna bot biasa
+-selama dalam sesi, jika "0" merupakan perintah untuk kembali ke menu,1/2/3/4 sesuai opsi
+-masukkan opsi tsb ke dalam sesi pengguna bot dan tdk diubah sebelum pengguna bot mengetik perintah "0" atau jika sesi berakhir
+-ketika opsi dalam sesi pengguna ada dan bernilai 1/2/3/4 handle pesan masuk dengan handler yang sesuai
+-jika value berisi errors maka LOG kan
+
+json webhook
+{
+  "object": "whatsapp_business_account",
+  "entry": [{
+    "id": "WHATSAPP-BUSINESS-ACCOUNT-ID",
+    "changes": [{
+      "value": {
+         "messaging_product": "whatsapp",
+         "metadata": {
+           "display_phone_number": "PHONE-NUMBER",
+           "phone_number_id": "PHONE-NUMBER-ID"
+         },
+      # Additional arrays and objects
+         "contacts": [{...}]
+         "errors": [{...}]
+         "messages": [{...}]
+         "statuses": [{...}]
+      },
+      "field": "messages"
+    }]
+  }]
+}
+
+
+MIGRATE TO WPPCONNECT
+
+This is what WPPCONNECT message looks like
+message ==  {
+  id: 'id',
+  viewed: false,
+  body: 'text_message',
+  type: 'chat',
+  t: 1722578968,
+  notifyName: '',
+  from: 'bot_number@c.us',
+  to: 'phone_number@c.us',
+  ack: 1,
+  invis: false,
+  isNewMsg: true,
+  star: false,
+  kicNotified: false,
+  recvFresh: true,
+  isFromTemplate: false,
+  pollInvalidated: false,
+  isSentCagPollCreation: false,
+  latestEditMsgKey: null,
+  latestEditSenderTimestampMs: null,
+  mentionedJidList: [],
+  groupMentions: [],
+  isEventCanceled: false,
+  eventInvalidated: false,
+  isVcardOverMmsDocument: false,
+  isForwarded: false,
+  hasReaction: false,
+  productHeaderImageRejected: false,
+  lastPlaybackProgress: 0,
+  isDynamicReplyButtonsMsg: false,
+  isCarouselCard: false,
+  parentMsgId: null,
+  isMdHistoryMsg: false,
+  stickerSentTs: 0,
+  isAvatar: false,
+  lastUpdateFromServerTs: 0,
+  invokedBotWid: null,
+  bizBotType: null,
+  botResponseTargetId: null,
+  botPluginType: null,
+  botPluginReferenceIndex: null,
+  botPluginSearchProvider: null,
+  botPluginSearchUrl: null,
+  botPluginSearchQuery: null,
+  botPluginMaybeParent: false,
+  botReelPluginThumbnailCdnUrl: null,
+  botMsgBodyType: null,
+  requiresDirectConnection: null,
+  bizContentPlaceholderType: null,
+  hostedBizEncStateMismatch: false,
+  senderOrRecipientAccountTypeHosted: false,
+  placeholderCreatedWhenAccountIsHosted: false,
+  chatId: 'phone_number@c.us',
+  fromMe: false,
+  sender: {
+    id: 'phone_number@c.us',
+    name: '',
+    shortName: '',
+    pushname: 'naufal.abiogaa',
+    type: 'in',
+    isBusiness: false,
+    isEnterprise: false,
+    isSmb: false,
+    isContactSyncCompleted: 1,
+    textStatusLastUpdateTime: -1,
+    syncToAddressbook: true,
+    formattedName: '',
+    isMe: false,
+    isMyContact: true,
+    isPSA: false,
+    isUser: true,
+    isWAContact: true,
+    profilePicThumbObj: {
+      eurl: '',
+      id: '6281391460274@c.us',
+      img: '',
+      imgFull: '',
+      tag: ''
+    },
+    msgs: null
+  },
+  timestamp: 1722578968,
+  content: 'text_message',
+  isGroupMsg: false,
+  mediaData: {}
+}
+
+This is what WPPCONNECT client looks like
+client ==  Whatsapp {
+  page: CdpPage { _isDragging: false, _timeoutSettings: TimeoutSettings {} },
+  autoCloseInterval: null,
+  autoCloseCalled: false,
+  isInitialized: true,
+  isInjected: true,
+  isStarted: true,
+  isLogged: true,
+  isInChat: true,
+  checkStartInterval: Timeout {
+    _idleTimeout: 5000,
+    _idlePrev: [TimersList],
+    _idleNext: [TimersList],
+    _idleStart: 145502,
+    _onTimeout: [Function (anonymous)],
+    _timerArgs: undefined,
+    _repeat: 5000,
+    _destroyed: false,
+    [Symbol(refed)]: true,
+    [Symbol(kHasPrimitive)]: false,
+    [Symbol(asyncId)]: 1136,
+    [Symbol(triggerId)]: 0
+  },
+  urlCode: '',
+  attempt: 0,
+  catchQR: undefined,
+  statusFind: undefined,
+  onLoadingScreen: undefined,
+  catchLinkCode: [Function: catchLinkCode],
+  session: 'boyolaliBot',
+  options: {
+    folderNameToken: './tokens',
+    headless: true,
+    devtools: false,
+    useChrome: true,
+    debug: false,
+    logQR: true,
+    browserWS: '',
+    browserArgs: [ '' ],
+    puppeteerOptions: {
+      userDataDir: 'dir',
+      executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+    },
+    disableWelcome: false,
+    updatesLog: true,
+    autoClose: 60000,
+    deviceSyncTimeout: 180000,
+    createPathFileToken: true,
+    waitForLogin: true,
+    logger: DerivedLogger {
+      _readableState: [ReadableState],
+      readable: true,
+      _events: [Object: null prototype],
+      _eventsCount: 3,
+      _maxListeners: undefined,
+      _writableState: [WritableState],
+      writable: true,
+      allowHalfOpen: true,
+      _transformState: [Object],
+      silent: undefined,
+      format: [Format],
+      defaultMeta: null,
+      levels: [Object],
+      level: 'silly',
+      exceptions: [ExceptionHandler],
+      rejections: [RejectionHandler],
+      profilers: {},
+      exitOnError: true,
+      [Symbol(shapeMode)]: true,
+      [Symbol(kCapture)]: false
+    },
+    tokenStore: 'file',
+    whatsappVersion: '2.3000.10147x',
+    deviceName: false,
+    linkPreviewApiServers: null,
+    disableGoogleAnalytics: true,
+    googleAnalyticsId: null,
+    poweredBy: 'WPPConnect',
+    session: 'session_name',
+    phoneNumber: '6285183098108',
+    catchLinkCode: [Function: catchLinkCode],
+    sessionToken: undefined
+  },
+  logger: <ref *1> DerivedLogger {
+    _readableState: ReadableState {
+      objectMode: true,
+      highWaterMark: 16,
+      buffer: BufferList { head: null, tail: null, length: 0 },
+      length: 0,
+      pipes: [Console],
+      pipesCount: 1,
+      flowing: true,
+      ended: false,
+      endEmitted: false,
+      reading: false,
+      sync: false,
+      needReadable: true,
+      emittedReadable: false,
+      readableListening: false,
+      resumeScheduled: false,
+      paused: false,
+      emitClose: true,
+      autoDestroy: false,
+      destroyed: false,
+      defaultEncoding: 'utf8',
+      awaitDrain: 0,
+      readingMore: true,
+      decoder: null,
+      encoding: null
+    },
+    readable: true,
+    _events: [Object: null prototype] {
+      prefinish: [Function: prefinish],
+      end: [Function],
+      data: [Function: ondata]
+    },
+    _eventsCount: 3,
+    _maxListeners: undefined,
+    _writableState: WritableState {
+      objectMode: true,
+      highWaterMark: 16,
+      finalCalled: false,
+      needDrain: false,
+      ending: false,
+      ended: false,
+      finished: false,
+      destroyed: false,
+      decodeStrings: true,
+      defaultEncoding: 'utf8',
+      length: 0,
+      writing: false,
+      corked: 0,
+      sync: false,
+      bufferProcessing: false,
+      onwrite: [Function (anonymous)],
+      writecb: null,
+      writelen: 0,
+      bufferedRequest: null,
+      lastBufferedRequest: null,
+      pendingcb: 0,
+      prefinished: false,
+      errorEmitted: false,
+      emitClose: true,
+      autoDestroy: false,
+      bufferedRequestCount: 0,
+      corkedRequestsFree: [CorkedRequest]
+    },
+    writable: true,
+    allowHalfOpen: true,
+    _transformState: {
+      afterTransform: [Function: bound afterTransform],
+      needTransform: true,
+      transforming: false,
+      writecb: null,
+      writechunk: null,
+      writeencoding: 'utf8'
+    },
+    silent: undefined,
+    format: Format { options: {}, Format: [Function: Format] },
+    defaultMeta: null,
+    levels: {
+      error: 0,
+      warn: 1,
+      info: 2,
+      http: 3,
+      verbose: 4,
+      debug: 5,
+      silly: 6
+    },
+    level: 'silly',
+    exceptions: ExceptionHandler { logger: [Circular *1], handlers: Map(0) {} },
+    rejections: RejectionHandler { logger: [Circular *1], handlers: Map(0) {} },
+    profilers: {},
+    exitOnError: true,
+    [Symbol(shapeMode)]: true,
+    [Symbol(kCapture)]: false
+  },
+  listenerEmitter: EventEmitter {
+    _events: [Object: null prototype] {
+      onInterfaceChange: [Function (anonymous)],
+      onStateChange: [Function (anonymous)],
+      onMessage: [AsyncFunction (anonymous)]
+    },
+    _eventsCount: 3,
+    _maxListeners: 0,
+    [Symbol(shapeMode)]: false,
+    [Symbol(kCapture)]: true,
+    [Symbol(nodejs.rejection)]: [Function (anonymous)]
+  },
+  connected: true
+}
+
+
+[1] Failed to send message to 6285282379729@c.us: Runtime.callFunctionOn timed out. Increase the 'protocolTimeout' setting in launch/connect calls for a higher timeout if needed.

@@ -1,0 +1,6 @@
+PyMuPDF
+google-generativeai
+chromadb
+scikit-learn
+nltk
+flask

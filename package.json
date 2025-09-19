@@ -1,0 +1,37 @@
+{
+  "name": "whatsapp-bot",
+  "version": "1.0.0",
+  "description": "An example WhatsApp webhook server https://developers.facebook.com/docs/whatsapp/sample-app-endpoints",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev:serveo": "concurrently \"nodemon server-webhook.js\" \"ssh -R kiagengboyolali:80:localhost:3000 serveo.net\"",
+    "dev:localtunnel": "concurrently \"nodemon server-webhook.js\" \"lt --port 3000\"",
+    "dev": "nodemon server-webhook.js",
+    "dev:wpp": "nodemon --ignore tokens server-wpp.js",
+    "start:python": "python server.py",
+    "start:node": "nodemon --ignore tokens server-wpp.js",
+    "dev:wpp-py": "concurrently \"npm run start:python\" \"npm run start:node\"",
+    "start": "node server-wpp.js",
+    "clean": "rm -rf node_modules package-lock.json ~/.cache/puppeteer",
+    "rebuild": "npm run clean && npm install"
+  },
+  "author": "WhatsApp Team",
+  "license": "MIT",
+  "dependencies": {
+    "@google/generative-ai": "^0.16.0",
+    "@wppconnect-team/wppconnect": "*",
+    "axios": "^1.7.2",
+    "compromise": "13.1.1",
+    "concurrently": "^8.2.2",
+    "dotenv": "*",
+    "express": "^4.19.2",
+    "natural": "7.1.0",
+    "nodemon": "^3.1.4",
+    "raw-body": "^2.5.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": []
+}
